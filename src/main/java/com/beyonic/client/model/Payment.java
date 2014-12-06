@@ -1,13 +1,8 @@
 package com.beyonic.client.model;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 
 public class Payment {
@@ -53,18 +48,4 @@ public class Payment {
 	private String updatedBy;
 	@SerializedName("start_date")
 	private Date startDate;
-
-	public Map<String,String> getMetadataAsMap(){
-		Map<String,String> values= new HashMap<String, String>();
-		Gson gson = new Gson();
-		JsonParser parser = new JsonParser();
-	    JsonArray array = parser.parse(metadata).getAsJsonArray();
-	    for (int i=0; 1< array.size() ; i++) {
-	    	JsonArray array2 = parser.parse(gson.fromJson(array.get(i), String.class)).getAsJsonArray();
-	    	String key = gson.fromJson(array2.get(0), String.class);
-		    String value = gson.fromJson(array2.get(1), String.class);
-		    values.put(key, value);
-		}
-		return values;
-	}
 }

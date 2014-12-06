@@ -19,11 +19,13 @@ import com.google.gson.Gson;
 
 public abstract class ConnectionUtil {
 
+	private static final String AUTHORIZATION = "Authorization";
+
 	public static final String CHARSET = "UTF-8";
 
 	private static final String DNS_CACHE_TTL_PROPERTY_NAME = "networkaddress.cache.ttl";
 
-	protected enum RequestMethod {
+	public enum RequestMethod {
 		GET, POST, PUT, DELETE
 	}
 
@@ -134,7 +136,7 @@ public abstract class ConnectionUtil {
 		return rBody;
 	}
 
-	private static String makeURLConnectionRequest(RequestMethod method, String url, String query,
+	private static String makeConnectionRequest(RequestMethod method, String url, String query,
 			RequestOptions options) throws APIConnectionException, InvalidRequestException, AuthenticationException {
 		java.net.HttpURLConnection conn = null;
 		try {
@@ -170,7 +172,7 @@ public abstract class ConnectionUtil {
 		}
 	}
 
-	protected static String request(RequestMethod method, String url, RequestOptions options) throws AuthenticationException,
+	public static String request(RequestMethod method, String url, RequestOptions options) throws AuthenticationException,
 			InvalidRequestException, APIConnectionException	{
 		if (options == null) {
 			options = RequestOptions.getDefault();
@@ -206,7 +208,7 @@ public abstract class ConnectionUtil {
 
 	protected static String _request(RequestMethod method, String url,	RequestOptions options) throws AuthenticationException,
 			InvalidRequestException, APIConnectionException {
-		String apiKey = options.getHeaders().get(Constants.API_KEY);
+		String apiKey = options.getHeaders().get(AUTHORIZATION);
 		if (apiKey == null || apiKey.trim().isEmpty()) {
 			throw new AuthenticationException(
 					"No API key provided. (HINT: set your API key using 'Client.apiKey = <API-KEY>'. "
@@ -224,7 +226,7 @@ public abstract class ConnectionUtil {
 		String response;
 		try {
 			// HTTPSURLConnection verifies SSL cert by default
-			response = makeURLConnectionRequest(method, url, query, options);
+			response = makeConnectionRequest(method, url, query, options);
 		} catch (ClassCastException ce) {
 				throw ce;
 		}
